@@ -1,238 +1,190 @@
+# blender-open-mcp
 
-
-# BlenderMCP - Blender Model Context Protocol Integration
-
-BlenderMCP connects Blender to Claude AI through the Model Context Protocol (MCP), allowing Claude to directly interact with and control Blender. This integration enables prompt assisted 3D modeling, scene creation, and manipulation.
-
-[Full tutorial](https://www.youtube.com/watch?v=lCyQ717DuzQ)
-
-### Join the Community
-
-Give feedback, get inspired, and build on top of the MCP: [Discord](https://discord.gg/z5apgR8TFU)
-
-### Supporters
-
-<div align="center" markdown="1">
-   <sup>Special thanks to:</sup>
-   <br>
-   <br>
-   <a href="https://www.warp.dev/blender-mcp">
-      <img alt="Warp sponsorship" width="400" src="https://github.com/user-attachments/assets/c21102f7-bab9-4344-a731-0cf6b341cab2">
-   </a>
-
-### [Warp, the intelligent terminal for developers](https://www.warp.dev/blender-mcp)
-[Available for MacOS, Linux, & Windows](https://www.warp.dev/blender-mcp)<br>
-
-</div>
-<hr>
-
-**Other supporters:**
-
-[CodeRabbit](https://www.coderabbit.ai/)
-
-**All supporters:**
-
-[Support this project](https://github.com/sponsors/ahujasid)
-
-## Release notes (1.2.0)
-- View screenshots for Blender viewport to better understand the scene
-- Search and download Sketchfab models
-
-
-### Previously added features:
-- Support for Poly Haven assets through their API
-- Support to generate 3D models using Hyper3D Rodin
-- For newcomers, you can go straight to Installation. For existing users, see the points below
-- Download the latest addon.py file and replace the older one, then add it to Blender
-- Delete the MCP server from Claude and add it back again, and you should be good to go!
+`blender-open-mcp` is an open source project that integrates Blender with local AI models (via [Ollama](https://ollama.com/)) using the Model Context Protocol (MCP). This allows you to control Blender using natural language prompts, leveraging the power of AI to assist with 3D modeling tasks.
 
 ## Features
 
-- **Two-way communication**: Connect Claude AI to Blender through a socket-based server
-- **Object manipulation**: Create, modify, and delete 3D objects in Blender
-- **Material control**: Apply and modify materials and colors
-- **Scene inspection**: Get detailed information about the current Blender scene
-- **Code execution**: Run arbitrary Python code in Blender from Claude
-
-## Components
-
-The system consists of two main components:
-
-1. **Blender Addon (`addon.py`)**: A Blender addon that creates a socket server within Blender to receive and execute commands
-2. **MCP Server (`src/blender_mcp/server.py`)**: A Python server that implements the Model Context Protocol and connects to the Blender addon
+- **Control Blender with Natural Language:** Send prompts to a locally running Ollama model to perform actions in Blender.
+- **MCP Integration:** Uses the Model Context Protocol for structured communication between the AI model and Blender.
+- **Ollama Support:** Designed to work with Ollama for easy local model management.
+- **Blender Add-on:** Includes a Blender add-on to provide a user interface and handle communication with the server.
+- **PolyHaven Integration (Optional):** Download and use assets (HDRIs, textures, models) from [PolyHaven](https://polyhaven.com/) directly within Blender via AI prompts.
+- **Basic 3D Operations:**
+  - Get Scene and Object Info
+  - Create Primitives
+  - Modify and delete objects
+  - Apply materials
+- **Render Support:** Render images using the tool and retrieve information based on the output.
 
 ## Installation
 
-
 ### Prerequisites
 
-- Blender 3.0 or newer
-- Python 3.10 or newer
-- uv package manager: 
+1. **Blender:** Blender 3.0 or later. Download from [blender.org](https://www.blender.org/download/).
+2. **Ollama:** Install from [ollama.com](https://ollama.com/), following OS-specific instructions.
+3. **Python:** Python 3.10 or later.
+4. **uv:** Install using `pip install uv`.
+5. **Git:** Required for cloning the repository.
 
-**If you're on Mac, please install uv as**
-```bash
-brew install uv
-```
-**On Windows**
-```bash
-powershell -c "irm https://astral.sh/uv/install.ps1 | iex" 
-```
-and then
-```bash
-set Path=C:\Users\nntra\.local\bin;%Path%
-```
+### Installation Steps
 
-Otherwise installation instructions are on their website: [Install uv](https://docs.astral.sh/uv/getting-started/installation/)
+1. **Clone the Repository:**
 
-**⚠️ Do not proceed before installing UV**
+   ```bash
+   git clone https://github.com/dhakalnirajan/blender-open-mcp.git
+   cd blender-open-mcp
+   ```
 
+2. **Create and Activate a Virtual Environment (Recommended):**
 
-### Claude for Desktop Integration
+   ```bash
+   uv venv
+   source .venv/bin/activate  # On Linux/macOS
+   .venv\Scripts\activate  # On Windows
+   ```
 
-[Watch the setup instruction video](https://www.youtube.com/watch?v=neoK_WMq92g) (Assuming you have already installed uv)
+3. **Install Dependencies:**
 
-Go to Claude > Settings > Developer > Edit Config > claude_desktop_config.json to include the following:
+   ```bash
+   uv pip install -e .
+   ```
 
-```json
-{
-    "mcpServers": {
-        "blender": {
-            "command": "uvx",
-            "args": [
-                "blender-mcp"
-            ]
-        }
-    }
-}
-```
+4. **Install the Blender Add-on:**
 
-### Cursor integration
+   - Open Blender.
+   - Go to `Edit -> Preferences -> Add-ons`.
+   - Click `Install...`.
+   - Select the `addon.py` file from the `blender-open-mcp` directory.
+   - Enable the "Blender MCP" add-on.
 
-[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=blender&config=eyJjb21tYW5kIjoidXZ4IGJsZW5kZXItbWNwIn0%3D)
+5. **Download an Ollama Model (if not already installed):**
 
-For Mac users, go to Settings > MCP and paste the following 
+   ```bash
+   ollama run llama3.2
+   ```
 
-- To use as a global server, use "add new global MCP server" button and paste
-- To use as a project specific server, create `.cursor/mcp.json` in the root of the project and paste
+   *(Other models like **`Gemma3`** can also be used.)*
 
+## Setup
 
-```json
-{
-    "mcpServers": {
-        "blender": {
-            "command": "uvx",
-            "args": [
-                "blender-mcp"
-            ]
-        }
-    }
-}
-```
+1. **Start the Ollama Server:** Ensure Ollama is running in the background.
 
-For Windows users, go to Settings > MCP > Add Server, add a new server with the following settings:
+2. **Start the MCP Server:**
 
-```json
-{
-    "mcpServers": {
-        "blender": {
-            "command": "cmd",
-            "args": [
-                "/c",
-                "uvx",
-                "blender-mcp"
-            ]
-        }
-    }
-}
-```
+   ```bash
+   blender-mcp
+   ```
 
-[Cursor setup video](https://www.youtube.com/watch?v=wgWsJshecac)
+   Or,
 
-**⚠️ Only run one instance of the MCP server (either on Cursor or Claude Desktop), not both**
+   ```bash
+   python src/blender_open_mcp/server.py
+   ```
 
-### Installing the Blender Addon
+   By default, it listens on `http://0.0.0.0:8000`, but you can modify settings:
 
-1. Download the `addon.py` file from this repo
-1. Open Blender
-2. Go to Edit > Preferences > Add-ons
-3. Click "Install..." and select the `addon.py` file
-4. Enable the addon by checking the box next to "Interface: Blender MCP"
+   ```bash
+   blender-mcp --host 127.0.0.1 --port 8001 --ollama-url http://localhost:11434 --ollama-model llama3.2
+   ```
 
+3. **Start the Blender Add-on Server:**
+
+   - Open Blender and the 3D Viewport.
+   - Press `N` to open the sidebar.
+   - Find the "Blender MCP" panel.
+   - Click "Start MCP Server".
 
 ## Usage
 
-### Starting the Connection
-![BlenderMCP in the sidebar](assets/addon-instructions.png)
-
-1. In Blender, go to the 3D View sidebar (press N if not visible)
-2. Find the "BlenderMCP" tab
-3. Turn on the Poly Haven checkbox if you want assets from their API (optional)
-4. Click "Connect to Claude"
-5. Make sure the MCP server is running in your terminal
-
-### Using with Claude
-
-Once the config file has been set on Claude, and the addon is running on Blender, you will see a hammer icon with tools for the Blender MCP.
-
-![BlenderMCP in the sidebar](assets/hammer-icon.png)
-
-#### Capabilities
-
-- Get scene and object information 
-- Create, delete and modify shapes
-- Apply or create materials for objects
-- Execute any Python code in Blender
-- Download the right models, assets and HDRIs through [Poly Haven](https://polyhaven.com/)
-- AI generated 3D models through [Hyper3D Rodin](https://hyper3d.ai/)
-
+Interact with `blender-open-mcp` using the `mcp` command-line tool:
 
 ### Example Commands
 
-Here are some examples of what you can ask Claude to do:
+- **Basic Prompt:**
 
-- "Create a low poly scene in a dungeon, with a dragon guarding a pot of gold" [Demo](https://www.youtube.com/watch?v=DqgKuLYUv00)
-- "Create a beach vibe using HDRIs, textures, and models like rocks and vegetation from Poly Haven" [Demo](https://www.youtube.com/watch?v=I29rn92gkC4)
-- Give a reference image, and create a Blender scene out of it [Demo](https://www.youtube.com/watch?v=FDRb03XPiRo)
-- "Generate a 3D model of a garden gnome through Hyper3D"
-- "Get information about the current scene, and make a threejs sketch from it" [Demo](https://www.youtube.com/watch?v=jxbNI5L7AH8)
-- "Make this car red and metallic" 
-- "Create a sphere and place it above the cube"
-- "Make the lighting like a studio"
-- "Point the camera at the scene, and make it isometric"
+  ```bash
+  mcp prompt "Hello BlenderMCP!" --host http://localhost:8000
+  ```
 
-## Hyper3D integration
+- **Get Scene Information:**
 
-Hyper3D's free trial key allows you to generate a limited number of models per day. If the daily limit is reached, you can wait for the next day's reset or obtain your own key from hyper3d.ai and fal.ai.
+  ```bash
+  mcp tool get_scene_info --host http://localhost:8000
+  ```
+
+- **Create a Cube:**
+
+  ```bash
+  mcp prompt "Create a cube named 'my_cube'." --host http://localhost:8000
+  ```
+
+- **Render an Image:**
+
+  ```bash
+  mcp prompt "Render the image." --host http://localhost:8000
+  ```
+
+- **Using PolyHaven (if enabled):**
+
+  ```bash
+  mcp prompt "Download a texture from PolyHaven." --host http://localhost:8000
+  ```
+
+## Available Tools
+
+| Tool Name                  | Description                            | Parameters                                            |
+| -------------------------- | -------------------------------------- | ----------------------------------------------------- |
+| `get_scene_info`           | Retrieves scene details.               | None                                                  |
+| `get_object_info`          | Retrieves information about an object. | `object_name` (str)                                   |
+| `create_object`            | Creates a 3D object.                   | `type`, `name`, `location`, `rotation`, `scale`       |
+| `modify_object`            | Modifies an object’s properties.       | `name`, `location`, `rotation`, `scale`, `visible`    |
+| `delete_object`            | Deletes an object.                     | `name` (str)                                          |
+| `set_material`             | Assigns a material to an object.       | `object_name`, `material_name`, `color`               |
+| `render_image`             | Renders an image.                      | `file_path` (str)                                     |
+| `execute_blender_code`     | Executes Python code in Blender.       | `code` (str)                                          |
+| `get_polyhaven_categories` | Lists PolyHaven asset categories.      | `asset_type` (str)                                    |
+| `search_polyhaven_assets`  | Searches PolyHaven assets.             | `asset_type`, `categories`                            |
+| `download_polyhaven_asset` | Downloads a PolyHaven asset.           | `asset_id`, `asset_type`, `resolution`, `file_format` |
+| `set_texture`              | Applies a downloaded texture.          | `object_name`, `texture_id`                           |
+| `set_ollama_model`         | Sets the Ollama model.                 | `model_name` (str)                                    |
+| `set_ollama_url`           | Sets the Ollama server URL.            | `url` (str)                                           |
+| `get_ollama_models`        | Lists available Ollama models.         | None                                                  |
+
+## Additional Available Tools
+
+The following additional tools are now available for advanced scene and object management, batch operations, and utility functions:
+
+| Tool Name                | Description                                                      |
+|-------------------------|------------------------------------------------------------------|
+| `undo_last_action`      | Undo the last action performed in Blender.                       |
+| `redo_action`           | Redo the last undone action.                                     |
+| `save_scene_variant`    | Save the current scene as a named variant.                       |
+| `load_scene_variant`    | Load a previously saved scene variant by name.                   |
+| `origin_set`            | Set the origin of an object.                                     |
+| `transform_apply`       | Apply location, rotation, and/or scale transforms to an object.  |
+| `parent_set`            | Set the parent of an object.                                     |
+| `select_all`            | Select or deselect all objects.                                  |
+| `snap_selected_to_cursor`| Snap selected objects to the 3D cursor.                         |
+| `duplicate_move`        | Duplicate selected objects and move them.                        |
+| `primitive_add`         | Add a mesh primitive (cube, sphere, etc.) to the scene.          |
+| `get_simple_info`       | Get basic information about the Blender scene.                   |
+| `link_blend`            | Link data from another .blend file.                              |
+| `find_missing_files`    | Find and report missing files in the current Blender project.     |
+| `add_text`              | Add a text object to the scene.                                  |
+
+These tools are in addition to the core and PolyHaven tools listed above, and provide more granular control over your Blender workflow via the MCP protocol.
 
 ## Troubleshooting
 
-- **Connection issues**: Make sure the Blender addon server is running, and the MCP server is configured on Claude, DO NOT run the uvx command in the terminal. Sometimes, the first command won't go through but after that it starts working.
-- **Timeout errors**: Try simplifying your requests or breaking them into smaller steps
-- **Poly Haven integration**: Claude is sometimes erratic with its behaviour
-- **Have you tried turning it off and on again?**: If you're still having connection errors, try restarting both Claude and the Blender server
+If you encounter issues:
 
+- Ensure Ollama and the `blender-open-mcp` server are running.
+- Check Blender’s add-on settings.
+- Verify command-line arguments.
+- Refer to logs for error details.
 
-## Technical Details
+For further assistance, visit the [GitHub Issues](https://github.com/dhakalnirajan/blender-open-mcp/issues) page.
 
-### Communication Protocol
+---
 
-The system uses a simple JSON-based protocol over TCP sockets:
-
-- **Commands** are sent as JSON objects with a `type` and optional `params`
-- **Responses** are JSON objects with a `status` and `result` or `message`
-
-## Limitations & Security Considerations
-
-- The `execute_blender_code` tool allows running arbitrary Python code in Blender, which can be powerful but potentially dangerous. Use with caution in production environments. ALWAYS save your work before using it.
-- Poly Haven requires downloading models, textures, and HDRI images. If you do not want to use it, please turn it off in the checkbox in Blender. 
-- Complex operations might need to be broken down into smaller steps
-
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## Disclaimer
-
-This is a third-party integration and not made by Blender. Made by [Siddharth](https://x.com/sidahuj)
+Happy Blending with AI! 🚀
