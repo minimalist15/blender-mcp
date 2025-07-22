@@ -149,10 +149,55 @@ Interact with `blender-open-mcp` using the `mcp` command-line tool:
 | `set_ollama_model`         | Sets the Ollama model.                 | `model_name` (str)                                    |
 | `set_ollama_url`           | Sets the Ollama server URL.            | `url` (str)                                           |
 | `get_ollama_models`        | Lists available Ollama models.         | None                                                  |
+| `list_assets`              | Lists all files in an asset directory. | `asset_dir`, `file_types`, `recursive`                |
+| `get_asset_info`           | Returns metadata about a file.         | `asset_path`                                          |
+| `import_image_to_plane`    | Imports an image as a plane.           | `image_path`, `location`, `size`                      |
+| `search_assets`            | Searches local assets.                 | `query`, `tags`, `type`                               |
+| `get_scene_graph`          | Returns the scene graph.               | None                                                  |
+| `batch_place_assets`       | Places multiple assets in the scene.   | `asset_names`, `positions`, `rotations`, `scales`     |
+| `group_objects`            | Groups objects under a parent.         | `object_names`, `group_name`                          |
+| `semantic_edit`            | Applies a semantic edit instruction.   | `instruction`                                         |
+| `suggest_scene_improvements`| Suggests improvements for the scene.  | None                                                  |
+| `batch_import_assets`      | Imports all assets from a folder.      | `folder_path`                                         |
+| `generate_parametric_asset`| Generates a parametric asset.          | `type`, `params`                                      |
+| `randomize_scene`          | Creates scene variations.              | `n_variations`                                        |
+| `image_to_geometry`        | Converts an image to geometry.         | `image_path`                                          |
+| `transfer_style_from_image`| Transfers style from an image.         | `image_path`                                          |
+| `add_human_figure`         | Adds a human figure to the scene.      | `pose`                                                |
+| `create_room`              | Creates a room with given parameters.  | `width`, `depth`, `height`, `style`, `doors`, `windows`|
+| `auto_lighting`            | Adds lighting to the scene.            | `style`                                               |
+| `auto_place_camera`        | Places the camera automatically.       | `mode`                                                |
+| `scene_quality_check`      | Checks the quality of the scene.       | None                                                  |
+| `auto_place_asset`         | Places an asset automatically.         | `asset_name`, `target_area`, `constraints`            |
+| `auto_arrange_furniture`   | Arranges furniture in an area.         | `area_type`                                           |
+| `harmonize_materials`      | Harmonizes materials in the scene.     | `palette`, `style`                                    |
+| `place_asset_smart`        | Places asset with collision avoidance. | `asset_name`, `area`, `constraints`                   |
+| `create_scene_from_text`   | Creates a scene from a text description.| `description`, `style`                               |
+| `create_scene_from_image`  | Creates a scene from an image.         | `image_path`                                          |
+| `batch_render`             | Renders multiple views.                | `views`, `resolution`, `preset`                       |
+| `get_asset_metadata`       | Gets metadata for an asset.            | `asset_path`                                          |
+| `append_blend`             | Appends data from another .blend file. | `blend_path`, `data_type`, `object_name`              |
+| `import_model`             | Imports a 3D model.                    | `asset_path`                                          |
+| `import_texture`           | Imports a texture.                     | `texture_path`                                        |
+| `insert_keyframe`          | Inserts a keyframe for an object.      | `object_name`, `data_path`, `frame`, `index`          |
+| `scatter_objects`          | Scatters objects on a target.          | `source`, `target`, `count`, `method`                 |
+| `apply_geometry_nodes`     | Applies geometry nodes to an object.   | `object_name`, `node_group_name`, `inputs`            |
+| `brush_asset_activate`     | Activates a brush asset.               | `asset_library_type`, `asset_library_identifier`, `relative_asset_identifier`, `use_toggle` |
+| `brush_asset_delete`       | Deletes the active brush asset.        | None                                                  |
+| `brush_asset_edit_metadata`| Edits brush asset metadata.            | `catalog_path`, `author`, `description`               |
+| `apply_modifier`           | Applies a modifier to an object.       | `object_name`, `modifier_name`                        |
+| `remove_modifier`          | Removes a modifier from an object.     | `object_name`, `modifier_name`                        |
+| `create_curve`             | Creates a curve object.                | `curve_type`, `points`                                |
+| `sweep_mesh_along_curve`   | Sweeps a mesh along a curve.           | `mesh_name`, `curve_name`                             |
+| `convert_curve_to_mesh`    | Converts a curve to a mesh.            | `curve_name`                                          |
+| `add_modifier`             | Adds a modifier to an object.          | `object_name`, `modifier_type`, `modifier_name`, `params` |
+| `boolean_operation`        | Performs a boolean operation.          | `object_a`, `object_b`, `operation`                   |
+| `import_asset`             | Imports an asset file.                 | `file_path`, `file_type`                              |
+| `export_scene`             | Exports the scene to a file.           | `file_path`, `file_type`                              |
+| `add_light`                | Adds a light to the scene.             | `type`, `location`, `energy`                          |
+| `set_camera_params`        | Sets camera parameters.                | `camera_name`, `focal_length`, `dof_distance`         |
 
 ## Additional Available Tools
-
-The following additional tools are now available for advanced scene and object management, batch operations, and utility functions:
 
 | Tool Name                | Description                                                      |
 |-------------------------|------------------------------------------------------------------|
